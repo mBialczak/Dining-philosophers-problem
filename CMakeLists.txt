@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.14)
 project(Dining-Philosophers-Problem)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp
+                               src/Fork.cpp
+                               src/Logger.cpp
+                               src/Philosopher.cpp
+                               src/PhilosophyMeeting.cpp)
 target_compile_options(${PROJECT_NAME}
                        PRIVATE
                        -Wall
