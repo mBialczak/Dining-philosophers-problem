@@ -6,14 +6,15 @@ class PhilosophyMeeting;
 
 class Philosopher
 {
-    Philosopher(Logger* const logger,
-                Fork& leftFork,
-                Fork& rightFork,
+  public:
+    Philosopher(Logger& logger,
+                Fork* leftFork,
+                Fork* rightFork,
                 PhilosophyMeeting& meeting);
 
   private:
-    Logger* const logger_;
-    Fork& leftFork_;
-    Fork& rightFork_;
+    Logger& logger_;
+    Fork* leftFork_;
+    Fork* rightFork_;
     PhilosophyMeeting& meeting_;
 };

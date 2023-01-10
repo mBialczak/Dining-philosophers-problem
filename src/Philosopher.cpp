@@ -2,9 +2,9 @@
 
 #include "PhilosophyMeeting.hpp"
 
-Philosopher::Philosopher(Logger* const logger,
-                         Fork& rightFork,
-                         Fork& leftFork,
+Philosopher::Philosopher(Logger& logger,
+                         Fork* rightFork,
+                         Fork* leftFork,
                          PhilosophyMeeting& meeting)
     : logger_(logger),
       leftFork_(leftFork),
