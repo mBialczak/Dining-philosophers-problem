@@ -10,11 +10,17 @@ class Philosopher
     Philosopher(Logger& logger,
                 Fork* leftFork,
                 Fork* rightFork,
-                PhilosophyMeeting& meeting);
+                PhilosophyMeeting& meeting,
+                int id);
+    void tryToEat();
+    int id() const;
+    int leftForkId() const;
+    int rightForkId() const;
 
   private:
     Logger& logger_;
     Fork* leftFork_;
     Fork* rightFork_;
     PhilosophyMeeting& meeting_;
+    const int id_;
 };
