@@ -12,7 +12,8 @@ target_compile_options(${PROJECT_NAME}
                        -Wextra
                        -pedantic
                        -Wconversion
-                       -Werror)
+                       -Werror
+                       -fsanitize=thread)
 
 target_link_libraries(${PROJECT_NAME}
                       pthread
