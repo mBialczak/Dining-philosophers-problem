@@ -18,7 +18,7 @@ class PhilosophyMeeting
     PhilosophyMeeting(std::ostream& streamToLog,
                       int tableSize,
                       int mealsToServe,
-                      std::chrono::milliseconds mealDuration,
+                      std::chrono::microseconds mealDuration,
                       bool shouldShareMealsEqually = true,
                       bool fullLogging = false);
     void startEatingDiscussion();
@@ -29,16 +29,16 @@ class PhilosophyMeeting
 
   private:
     void createForks();
-    void createPhilosophers(std::chrono::milliseconds mealDuration,
+    void createPhilosophers(std::chrono::microseconds mealDuration,
                             bool shouldShareEqually,
                             bool fullLogging);
-    void createFirstPhilosopher(std::chrono::milliseconds mealDuration,
+    void createFirstPhilosopher(std::chrono::microseconds mealDuration,
                                 bool shouldShareEqually,
                                 bool fullLogging);
-    void createMiddlePhilosophers(std::chrono::milliseconds mealDuration,
+    void createMiddlePhilosophers(std::chrono::microseconds mealDuration,
                                   bool shouldShareEqually,
                                   bool fullLogging);
-    void createLastPhilosopher(std::chrono::milliseconds mealDuration,
+    void createLastPhilosopher(std::chrono::microseconds mealDuration,
                                bool shouldShareEqually,
                                bool fullLogging);
     void describeTableArrangement() const;

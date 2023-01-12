@@ -16,27 +16,29 @@ class Philosopher
                 Fork* rightFork,
                 PhilosophyMeeting& meeting,
                 int id,
-                std::chrono::milliseconds mealDuration,
+                std::chrono::microseconds mealDuration,
                 bool shouldShareMealsEqually,
                 bool fullLogging);
-    void tryToEat();   // TODO: VERIFY const
+    void tryToEat();
     int id() const;
     int leftForkId() const;
     int rightForkId() const;
     int mealsEaten() const;
 
   private:
+    void eat();
     bool requestMeal() const;
     void increaseOwnMealsCount(bool wasMealServed);
     void logEatingMessage() const;
     void logOthersMoreHungryMessage() const;
+    bool isAmongMostHungry() const;
 
     Logger& logger_;
     Fork* leftFork_;
     Fork* rightFork_;
     PhilosophyMeeting& meeting_;
     const int id_;
-    const std::chrono::milliseconds mealDuration_;
+    const std::chrono::microseconds mealDuration_;
     const bool shareEqually_;
     const bool fullLogging_;
     mutable std::shared_mutex mealsEatenMtx_;

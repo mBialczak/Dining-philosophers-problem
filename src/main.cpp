@@ -15,7 +15,7 @@ int main(int arg, char** argv)
     PhilosophyMeeting meeting { std::cout,
                                 philosophersNumber,
                                 meals,
-                                std::chrono::milliseconds(mealDuration),
+                                std::chrono::microseconds(mealDuration),
                                 static_cast<bool>(equalShare),
                                 static_cast<bool>(fullLogging) };
 

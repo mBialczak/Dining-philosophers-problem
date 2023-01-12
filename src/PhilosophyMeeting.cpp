@@ -8,11 +8,10 @@
 PhilosophyMeeting::PhilosophyMeeting(std::ostream& streamToLog,
                                      int tableSize,
                                      int mealsToServe,
-                                     std::chrono::milliseconds mealDuration,
+                                     std::chrono::microseconds mealDuration,
                                      bool shouldShareMealsEqually,
                                      bool fullLogging)
-    // : logger_(std::make_unique<Logger>(streamToLog)),//TODO: VERIFY
-    : logger_(streamToLog),   // TODO: VERIFY
+    : logger_(streamToLog),
       tableSize_(tableSize),
       meals_(mealsToServe)
 {
@@ -30,7 +29,7 @@ void PhilosophyMeeting::createForks()
     }
 }
 
-void PhilosophyMeeting::createPhilosophers(std::chrono::milliseconds mealDuration,
+void PhilosophyMeeting::createPhilosophers(std::chrono::microseconds mealDuration,
                                            bool shouldShareEqually,
                                            bool fullLogging)
 {
@@ -41,7 +40,7 @@ void PhilosophyMeeting::createPhilosophers(std::chrono::milliseconds mealDuratio
     createLastPhilosopher(mealDuration, shouldShareEqually, fullLogging);
 }
 
-void PhilosophyMeeting::createFirstPhilosopher(std::chrono::milliseconds mealDuration,
+void PhilosophyMeeting::createFirstPhilosopher(std::chrono::microseconds mealDuration,
                                                bool shouldShareEqually,
                                                bool fullLogging)
 {
@@ -55,7 +54,7 @@ void PhilosophyMeeting::createFirstPhilosopher(std::chrono::milliseconds mealDur
                                                              fullLogging));
 }
 
-void PhilosophyMeeting::createMiddlePhilosophers(std::chrono::milliseconds mealDuration,
+void PhilosophyMeeting::createMiddlePhilosophers(std::chrono::microseconds mealDuration,
                                                  bool shouldShareEqually,
                                                  bool fullLogging)
 {
@@ -71,7 +70,7 @@ void PhilosophyMeeting::createMiddlePhilosophers(std::chrono::milliseconds mealD
     }
 }
 
-void PhilosophyMeeting::createLastPhilosopher(std::chrono::milliseconds mealDuration,
+void PhilosophyMeeting::createLastPhilosopher(std::chrono::microseconds mealDuration,
                                               bool shouldShareEqually,
                                               bool fullLogging)
 {
@@ -112,7 +111,6 @@ void PhilosophyMeeting::describeTableArrangement() const
                       << "\t\tright for id: " << philosopher->rightForkId() << '\n'
                       << "------------------------------------------\n";
     }
-    descriptionSS << "=======================================\n";
 
     logger_ << descriptionSS.str();
 }

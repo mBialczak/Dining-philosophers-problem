@@ -10,7 +10,7 @@ Philosopher::Philosopher(Logger& logger,
                          Fork* rightFork,
                          PhilosophyMeeting& meeting,
                          int id,
-                         std::chrono::milliseconds mealDuration,
+                         std::chrono::microseconds mealDuration,
                          bool shouldShareMealsEqually,
                          bool fullLogging)
     : logger_(logger),
@@ -26,20 +26,34 @@ Philosopher::Philosopher(Logger& logger,
 
 void Philosopher::tryToEat()
 {
+    shortThreadIds_.emplace(std::this_thread::get_id(), id_);
     while (meeting_.mealsLeft() > 0) {
-
-        shortThreadIds_.emplace(std::this_thread::get_id(), id_);
-
-        if (!shareEqually_
-            || mealsEaten() <= meeting_.findMostHungryPhilosopher()) {
-            bool wasMealServed = requestMeal();
-            increaseOwnMealsCount(wasMealServed);
-            std::this_thread::sleep_for(mealDuration_);
+        if (shareEqually_) {
+            if (isAmongMostHungry()) {
+                eat();
+            }
+            else {
+                if (fullLogging_) {
+                    logOthersMoreHungryMessage();
+                }
+            }
         }
         else {
-            logOthersMoreHungryMessage();
+            eat();
         }
     }
+}
+
+void Philosopher::eat()
+{
+    bool wasMealServed = requestMeal();
+    increaseOwnMealsCount(wasMealServed);
+    std::this_thread::sleep_for(mealDuration_);
+}
+
+bool Philosopher::isAmongMostHungry() const
+{
+    return mealsEaten() <= meeting_.findMostHungryPhilosopher();
 }
 
 bool Philosopher::requestMeal() const
