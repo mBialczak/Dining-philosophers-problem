@@ -4,14 +4,13 @@ Logger::Logger(std::ostream& stream)
     : stream_(stream)
 { }
 
-template <typename typeToPrint>
-void Logger::print(const typeToPrint& elementToPrint) const
+void Logger::print(const std::string& txt) const
 {
     std::lock_guard streamLock(coutMtx_);
-    stream_ << elementToPrint << std::endl;
+    stream_ << txt << std::endl;
 }
 
-Logger& operator<<(Logger& logger, const std::string& txt)
+const Logger& operator<<(const Logger& logger, const std::string& txt)
 {
     logger.print(txt);
 

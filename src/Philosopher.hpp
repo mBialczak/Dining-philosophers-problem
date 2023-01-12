@@ -1,6 +1,8 @@
 #pragma once
 
+#include <map>
 #include <shared_mutex>
+#include <thread>
 
 class Logger;
 class Fork;
@@ -15,7 +17,8 @@ class Philosopher
                 PhilosophyMeeting& meeting,
                 int id,
                 std::chrono::milliseconds mealDuration,
-                bool shouldShareMealsEqually);
+                bool shouldShareMealsEqually,
+                bool fullLogging);
     void tryToEat();   // TODO: VERIFY const
     int id() const;
     int leftForkId() const;
@@ -23,19 +26,20 @@ class Philosopher
     int mealsEaten() const;
 
   private:
-    void eat();   // TODO: REMOVE
-    bool requestMeal();   // TODO: VERIFY const?
+    bool requestMeal() const;
     void increaseOwnMealsCount(bool wasMealServed);
+    void logEatingMessage() const;
+    void logOthersMoreHungryMessage() const;
 
     Logger& logger_;
     Fork* leftFork_;
     Fork* rightFork_;
     PhilosophyMeeting& meeting_;
     const int id_;
-    int mealsEaten_;
     const std::chrono::milliseconds mealDuration_;
     const bool shareEqually_;
+    const bool fullLogging_;
     mutable std::shared_mutex mealsEatenMtx_;
-    // TODO: REMOVE
-    std::mutex test_;
+    int mealsEaten_;
+    mutable std::map<std::thread::id, int> shortThreadIds_;
 };

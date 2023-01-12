@@ -19,33 +19,36 @@ class PhilosophyMeeting
                       int tableSize,
                       int mealsToServe,
                       std::chrono::milliseconds mealDuration,
-                      bool shouldShareMealsEqually = true);
-    void startEatingDiscussion();   // TODO:
+                      bool shouldShareMealsEqually = true,
+                      bool fullLogging = false);
+    void startEatingDiscussion();
     void summarizeMeeting();
-    bool serveMeal();   // TODO: or something else to decrese number of meals
-    int mealsLeft();   // TODO: verify
-    int leastNumberOfEatenMeals();   // TODO: VERIFY const especially
+    bool serveMeal();
+    int mealsLeft() const;
+    int findMostHungryPhilosopher() const;
 
   private:
     void createForks();
     void createPhilosophers(std::chrono::milliseconds mealDuration,
-                            bool shouldShareEqually);
+                            bool shouldShareEqually,
+                            bool fullLogging);
     void createFirstPhilosopher(std::chrono::milliseconds mealDuration,
-                                bool shouldShareEqually);
+                                bool shouldShareEqually,
+                                bool fullLogging);
     void createMiddlePhilosophers(std::chrono::milliseconds mealDuration,
-                                  bool shouldShareEqually);
+                                  bool shouldShareEqually,
+                                  bool fullLogging);
     void createLastPhilosopher(std::chrono::milliseconds mealDuration,
-                               bool shouldShareEqually);
+                               bool shouldShareEqually,
+                               bool fullLogging);
     void describeTableArrangement() const;
+    void printSummaryMessage() const;
 
-    std::unique_ptr<Logger> logger_;   // TODO: VERIFY if we want unique or shared
+    Logger logger_;
     const int tableSize_;
-    int meals_;
-    std::vector<std::unique_ptr<Fork>> forks_;   // TODO: try make without unique
-    // std::vector<Philosopher> philosophers_;   // // TODO: consider unique_ptr
-    std::vector<std::unique_ptr<Philosopher>> philosophers_;   // // TODO: consider unique_ptr
-    // TODO: VERIFY
-    // std::array<Philosopher, 8> philosophers2_;   // TODO: VERIFY
+    std::vector<std::unique_ptr<Fork>> forks_;
+    std::vector<std::unique_ptr<Philosopher>> philosophers_;
     std::vector<std::thread> threads_;
-    mutable std::shared_mutex mealsMtx_;   // TODO: VERIFY if shared
+    int meals_;
+    mutable std::shared_mutex mealsMtx_;
 };

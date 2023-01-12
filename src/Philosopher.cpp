@@ -11,63 +11,44 @@ Philosopher::Philosopher(Logger& logger,
                          PhilosophyMeeting& meeting,
                          int id,
                          std::chrono::milliseconds mealDuration,
-                         bool shouldShareMealsEqually)
+                         bool shouldShareMealsEqually,
+                         bool fullLogging)
     : logger_(logger),
       leftFork_(leftFork),
       rightFork_(rightFork),
       meeting_(meeting),
       id_(id),
-      mealsEaten_(0),
       mealDuration_(mealDuration),
-      shareEqually_(shouldShareMealsEqually)
+      shareEqually_(shouldShareMealsEqually),
+      fullLogging_(fullLogging),
+      mealsEaten_(0)
 { }
 
-// TODO:
 void Philosopher::tryToEat()
 {
-    // TODO: VERIFY
     while (meeting_.mealsLeft() > 0) {
-        // TODO: VERIFY
-        // if (mealsEaten() <= meeting_.leastNumberOfEatenMeals()) {
-        // std::ostringstream message;
-        // message << "Aquired forks: " << leftFork_->id() << " and " << rightFork_->id() << "\n";
-        // logger_ << message.str();
-        // meeting_.serveMeal();
+
+        shortThreadIds_.emplace(std::this_thread::get_id(), id_);
+
         if (!shareEqually_
-            || mealsEaten() <= meeting_.leastNumberOfEatenMeals()) {
-            // eat();
+            || mealsEaten() <= meeting_.findMostHungryPhilosopher()) {
             bool wasMealServed = requestMeal();
             increaseOwnMealsCount(wasMealServed);
             std::this_thread::sleep_for(mealDuration_);
         }
-        // }
-        // std::scoped_lock bothForksLock(leftFork_->getMtx(), rightFork_->getMtx());
-        // std::ostringstream message;
-        // message << "Aquired forks: " << leftFork_->id() << " and " << rightFork_->id() << "\n";
-        // logger_ << message.str();
-        // meeting_.serveMeal();
-        // eat();
+        else {
+            logOthersMoreHungryMessage();
+        }
     }
 }
 
-// void Philosopher::eat()
-// {
-//     // std::scoped_lock bothForksLock(leftFork_->getMtx(), rightFork_->getMtx());// TODO: REMOVE
-
-//     // bool wasMealGiven = meeting_.serveMeal();// TODO: REMOVE
-//     // std::lock_guard mealsEatenLock(mealsEatenMtx_);
-//     // if (wasMealGiven) {
-//     //     ++mealsEaten_;
-//     // }
-// }
-
-bool Philosopher::requestMeal()
+bool Philosopher::requestMeal() const
 {
-    // We request meal only if both forks available
     std::scoped_lock bothForksLock(leftFork_->getMtx(), rightFork_->getMtx());
-    // TODO: REMOVE
+    if (fullLogging_) {
+        logEatingMessage();
+    }
 
-    // test_.lock();
     return meeting_.serveMeal();
 }
 
@@ -101,4 +82,24 @@ int Philosopher::mealsEaten() const
     std::shared_lock mealsEatenLock(mealsEatenMtx_);
 
     return mealsEaten_;
+}
+
+void Philosopher::logEatingMessage() const
+{
+    std::ostringstream ss;
+    ss << "thread [" << shortThreadIds_[std::this_thread::get_id()] << "]-> "
+       << "Philosopher " << std::to_string(id_)
+       << " aquired forks "
+       << leftFork_->id() << " and " << rightFork_->id()
+       << " and IS EATING";
+    logger_ << ss.str();
+}
+
+void Philosopher::logOthersMoreHungryMessage() const
+{
+    std::ostringstream ss;
+    ss << "thread [" << shortThreadIds_[std::this_thread::get_id()] << "]-> "
+       << "Philosopher " << std::to_string(id_)
+       << " decides others are more hungry and is THINKING until his turn";
+    logger_ << ss.str();
 }
