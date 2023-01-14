@@ -145,10 +145,9 @@ void PhilosophyMeeting::logSettings(int tableSize,
 {
     std::ostringstream message;
     message << "========= Settings =========\n"
-            // << "Settings from meetings based on command line args (or defaults):\n" //TODO: VERIFY
             << "number of philosophers / forks: " << tableSize << '\n'
             << "meals to serve: " << mealsToServe << '\n'
-            << "meals duration [macroseconds] " << mealDuration.count() << '\n'
+            << "meal duration [microseconds] " << mealDuration.count() << '\n'
             << "equal meal share: " << (shouldShareMealsEqually ? "true" : "false") << '\n'
             << "logging: " << (fullLogging ? "full" : "abbreviated") << '\n';
 
@@ -158,8 +157,8 @@ void PhilosophyMeeting::logSettings(int tableSize,
 void PhilosophyMeeting::logMeetingStart()
 {
     std::ostringstream message;
-    message << "The duration of meeting (only of multithreaded part) will be measured.\n\n"
-            << "========= Meeting starts =========";
+    message << "The duration of meeting (only the multithreaded part) will be measured.\n\n"
+            << "========= Meeting (the multithreaded part) starts =========";
     logger_ << message.str();
 }
 
@@ -167,7 +166,7 @@ void PhilosophyMeeting::logSummaryMessage() const
 {
     std::chrono::duration<double> meetingDuration = meetingEndTime_ - meetingStartTime_;
     std::ostringstream message;
-    message << "\n========= Meeting ended =============\n"
+    message << "\n========= Meeting (the multithreaded part) ended =============\n"
             << "Meals left: " << meals_ << "\n"
             << "Meeting (multithreaded part) duration: " << meetingDuration.count() << " seconds\n"
             << "----------------------------------\n";
