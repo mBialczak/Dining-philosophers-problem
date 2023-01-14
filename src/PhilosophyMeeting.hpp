@@ -15,6 +15,8 @@ class Logger;
 class PhilosophyMeeting
 {
   public:
+    using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
+
     PhilosophyMeeting(std::ostream& streamToLog,
                       int tableSize,
                       int mealsToServe,
@@ -41,8 +43,14 @@ class PhilosophyMeeting
     void createLastPhilosopher(std::chrono::microseconds mealDuration,
                                bool shouldShareEqually,
                                bool fullLogging);
+    void logMeetingStart();
+    void logSettings(int tableSize,
+                     int mealsToServe,
+                     std::chrono::microseconds mealDuration,
+                     bool shouldShareMealsEqually,
+                     bool fullLogging) const;
+    void logSummaryMessage() const;
     void describeTableArrangement() const;
-    void printSummaryMessage() const;
 
     Logger logger_;
     const int tableSize_;
@@ -51,4 +59,6 @@ class PhilosophyMeeting
     std::vector<std::thread> threads_;
     int meals_;
     mutable std::shared_mutex mealsMtx_;
+    TimePoint meetingStartTime_;
+    TimePoint meetingEndTime_;
 };

@@ -18,7 +18,17 @@ PhilosophyMeeting::PhilosophyMeeting(std::ostream& streamToLog,
     createForks();
     createPhilosophers(mealDuration, shouldShareMealsEqually, fullLogging);
     threads_.reserve(tableSize_);
-    describeTableArrangement();
+
+    logSettings(tableSize,
+                mealsToServe,
+                mealDuration,
+                shouldShareMealsEqually,
+                fullLogging);
+
+    if (fullLogging) {
+
+        describeTableArrangement();
+    }
 }
 
 void PhilosophyMeeting::createForks()
@@ -34,7 +44,6 @@ void PhilosophyMeeting::createPhilosophers(std::chrono::microseconds mealDuratio
                                            bool fullLogging)
 {
     philosophers_.reserve(tableSize_);
-
     createFirstPhilosopher(mealDuration, shouldShareEqually, fullLogging);
     createMiddlePhilosophers(mealDuration, shouldShareEqually, fullLogging);
     createLastPhilosopher(mealDuration, shouldShareEqually, fullLogging);
@@ -86,6 +95,8 @@ void PhilosophyMeeting::createLastPhilosopher(std::chrono::microseconds mealDura
 
 void PhilosophyMeeting::startEatingDiscussion()
 {
+    logMeetingStart();
+    meetingStartTime_ = std::chrono::high_resolution_clock::now();
     for (auto i = 0; i < tableSize_; ++i) {
         threads_.emplace_back(&Philosopher::tryToEat, philosophers_[i].get());
     }
@@ -96,7 +107,8 @@ void PhilosophyMeeting::summarizeMeeting()
     for (auto&& thread : threads_) {
         thread.join();
     }
-    printSummaryMessage();
+    meetingEndTime_ = std::chrono::high_resolution_clock::now();
+    logSummaryMessage();
 }
 
 void PhilosophyMeeting::describeTableArrangement() const
@@ -125,12 +137,39 @@ int PhilosophyMeeting::findMostHungryPhilosopher() const
     return (*iterToMostHungry)->mealsEaten();
 }
 
-void PhilosophyMeeting::printSummaryMessage() const
+void PhilosophyMeeting::logSettings(int tableSize,
+                                    int mealsToServe,
+                                    std::chrono::microseconds mealDuration,
+                                    bool shouldShareMealsEqually,
+                                    bool fullLogging) const
 {
     std::ostringstream message;
-    message << "==================================\n"
-            << "Meeting ended\n"
+    message << "========= Settings =========\n"
+            // << "Settings from meetings based on command line args (or defaults):\n" //TODO: VERIFY
+            << "number of philosophers / forks: " << tableSize << '\n'
+            << "meals to serve: " << mealsToServe << '\n'
+            << "meals duration [macroseconds] " << mealDuration.count() << '\n'
+            << "equal meal share: " << (shouldShareMealsEqually ? "true" : "false") << '\n'
+            << "logging: " << (fullLogging ? "full" : "abbreviated") << '\n';
+
+    logger_ << message.str();
+}
+
+void PhilosophyMeeting::logMeetingStart()
+{
+    std::ostringstream message;
+    message << "The duration of meeting (only of multithreaded part) will be measured.\n\n"
+            << "========= Meeting starts =========";
+    logger_ << message.str();
+}
+
+void PhilosophyMeeting::logSummaryMessage() const
+{
+    std::chrono::duration<double> meetingDuration = meetingEndTime_ - meetingStartTime_;
+    std::ostringstream message;
+    message << "\n========= Meeting ended =============\n"
             << "Meals left: " << meals_ << "\n"
+            << "Meeting (multithreaded part) duration: " << meetingDuration.count() << " seconds\n"
             << "----------------------------------\n";
     for (auto&& philosopher : philosophers_) {
         message << "Philosopher " << philosopher->id()
