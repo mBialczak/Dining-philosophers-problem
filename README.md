@@ -10,9 +10,9 @@ But in short the the Dining Philosophers Problem looks like this:
 There is a meeting of philosophers, during which they are discussing some philosophical ideas (or whatever philosophers discuss).
 But as most people, philosophers like to spend long discussions eating some good stuff.
 So they are provided with meals and everything would be nice and simple if there were enough forks for every one of them to eat whenever they like.
-But the problem assumes that the number of forks is equal to the number of philosophers participating in the discussion. And the strange thing is - each one of them needs exactly 2 forks simultaneously to be able to eat.
+But the problem assumes that **the number of forks is equal to the number of philosophers** participating in the discussion. And the thing is - **each one of them needs both his forks simultaneously** (one on his left and the other on his right)  to be able to eat.
 In order to imagine the problem better (if you haven't seen the wiki link already), consider a round table where the philosophers are sitting. Each one of them has a fork on his left and one on his right side. But for each philosopher, the fork to his right is a left-hand fork of the colleague sitting to his right (and so on).
-So there must be some kind of arrangement or agreement between them in order for them to be able to eat. So each philosopher either eats of thinks / discusses some ideas in a single moment of time.
+So there must be some kind of arrangement or agreement between them in order for them to be able to eat. So each philosopher either eats of thinks / discusses some ideas in a single moment of time (waiting to acquire both forks).
 My code in this repo represent one possible solution (hopefully a valid one - and if not, please send me your remarks).
 
 ## My solution features
