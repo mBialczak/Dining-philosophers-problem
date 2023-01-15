@@ -22,7 +22,7 @@ When runnig the build program, you are able to provide 5 arguments, which will c
 - **3rd argument** ->  **duration of a single meal** in microseconds. The microseconds of course are non realistic when it comes to real meal eating time, but this allows to observe program execution if you would like to serve a couple of millions of meals;
 - **4th argument** -> boolean for setting **equal sharing** of meals. You provide this argument as 0 or 1 accordingly:
     0 - no sharing (the system thread scheduler determines final result)
-	1 - equal sharing (less efficient but no philosopher will leave hungry ;);
+	1 - equal sharing (less efficient but no philosopher will leave hungry ;)
 - **5th argument** -> boolean for setting **log detail level** accordingly:
  0 - abbreviated logging
  1 - full logging (***not recommended for high meal number values***, as it will clutter up the console/terminal stream).
@@ -34,6 +34,7 @@ The only alternative is to provide no arguments, which will run program with def
 ##### Abbreviated log mode
 If you decide to use abbreviated logging mode (which seems likely in my opinion, after you decide to experiment a little bit with number of meals and philosophers) you will see something like this:
 ![Abbreviated log print example](screenshots/abbrev-log.png)
+
 So as can be seen, the log print contains:
 + settings passed as parameters to the program
 + information about starting the meeting (the multithreaded part)
@@ -42,8 +43,10 @@ So as can be seen, the log print contains:
 If you decide to use full log option, you will be provided with additional information:
 + the table arrangement, that is which philosopher owns which fork:
 ![Table arrangement printed in full-logging mode](screenshots/table-arrangement.png)
+
 + info describing which philosopher is currently eating, on which thread and which forks he was able to acquire in order to do so:
 ![Philosopher log on eating a meal](screenshots/full-log-not-shared.png)
+
 + additionally, **if you decided to share meals equally**, you will be provided with the log prints from philosophers who are very kind and decide to wait until more hungry philosophers eat:
 ![Philosophers eating logs if sharing](screenshots/full-log-sharing.png)
 ##### No equal-meal-sharing mode
