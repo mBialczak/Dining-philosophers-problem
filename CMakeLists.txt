@@ -7,22 +7,27 @@ add_executable(${PROJECT_NAME} src/main.cpp
                                src/Philosopher.cpp
                                src/PhilosophyMeeting.cpp)
 
-if(MSVC)
-target_link_libraries(${PROJECT_NAME}
-                      -fsanitize=thread)
-else()
+if (NOT WIN32)
 target_link_libraries(${PROJECT_NAME}
                       pthread
                       -fsanitize=thread)
-endif()
 
+target_compile_options(${PROJECT_NAME}
+                      PRIVATE
+                      -Wall
+                      -Wextra
+                      -pedantic
+                      -Wconversion
+                      -Werror
+                      -fsanitize=thread)
+else()
 target_compile_options(${PROJECT_NAME}
                        PRIVATE
                        -Wall
                        -Wextra
                        -pedantic
                        -Wconversion
-                       -Werror
-                       -fsanitize=thread)
+                       -Werror)
+endif()
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
