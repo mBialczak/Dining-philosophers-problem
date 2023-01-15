@@ -98,7 +98,8 @@ It took about 108 times longer to serve the same meal count! Of course it depend
 ## Pre-requisites for building and running
 - **CMake** with mininum version 3.14 installed,
 - C++17 compliant compiler (I used gcc 12.1.0 but I believe many previous version are compliant as well).
-- **make** or other building system
+- **make** or other building system (ninja in case of Windows for example).
+
 NOTE: I tried to adjust the CMakeLists.txt to work for Windows as well, but I usually program on Linux environment so it is possible that some slight adjustments might be needed.
 If so - I apologize.
 ## Building and runing
