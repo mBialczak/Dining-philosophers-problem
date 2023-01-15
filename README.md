@@ -19,11 +19,11 @@ My code in this repo represent one possible solution (hopefully a valid one - an
 When runnig the build program, you are able to provide 5 arguments, which will correspond to its settings:
 - **1st argument** -> the **number of philosophers** (and forks as well). Please note, that during the meeting **each philosopher will dine on his own thread**. Please keep in mind, that one additional thread (will always run - the main thread, which controls the program execution);
 - **2nd argument** -> total **number of meals to serve**;
-- **3rd argument** ->  **duration of meal** in microseconds. The microseconds of course are non realistic when it comes to real meal eating time, but this allows to observe program execution if you would like to serve a couple of millions of meals;
+- **3rd argument** ->  **duration of a single meal** in microseconds. The microseconds of course are non realistic when it comes to real meal eating time, but this allows to observe program execution if you would like to serve a couple of millions of meals;
 - **4th argument** -> boolean for setting **equal sharing** of meals. You provide this argument as 0 or 1 accordingly:
     0 - no sharing (the system thread scheduler determines final result)
 	1 - equal sharing (less efficient but no philosopher will leave hungry ;);
--**5th argument** -> boolean for setting **log detail level** accordingly:
+- **5th argument** -> boolean for setting **log detail level** accordingly:
  0 - abbreviated logging
  1 - full logging (***not recommended for high meal number values***, as it will clutter up the console/terminal stream).
 
