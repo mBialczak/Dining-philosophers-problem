@@ -76,12 +76,14 @@ or
 Many factors will affect the result of the program when run. In fact, each run with the same settings should be slightly different (except "equal-meal-sharing-mode", where meals should be almost always equally shared).
 Many of these factors could be set via 5 settings, so quite a lot interesting experiments can be done to understand the complexity of multithreaded programming world.
 Consider experimenting with all the combination of parameters:
-- philosopher/threads used count - especially in comparison with the number of threads supported by your system and with "share meals equaly" toggled 'on'. You might observe for example, that if you pass number of philosophers radically larger than one supported by your system, the program execution will be radically slower.
+- philosopher/threads used count - especially in comparison with the number of threads supported by your system and with "share meals equally" toggled 'on'. You might observe for example, that if you pass number of philosophers radically larger than one supported by your system, the program execution will be radically slower.
 As an example, on my 8-threaded machine the same number of meals (140 000), meal duration time set to 0 and abbreviated logs yielded radically different execution times when:
 created 7 philosophers -> `./Dining-Philosophers-Problem 7 140000 0 1 0`:
 ![execution time example 1](screenshots/execution-time-1.png)
+
 created 14 philosophers -> `./Dining-Philosophers-Problem 14 140000 0 1 0`:
 ![execution time example 2](screenshots/execution-time-2.png)
+
 It took about 108 times longer to serve the same meal count! Of course it depends a lot of the program code (the equal sharing was turned on), but might be useful tip for real world programing, when you are about to choose the number of threads used...
 - meal count (obviously)
 - meal duration time
