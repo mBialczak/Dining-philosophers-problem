@@ -30,6 +30,7 @@ When runnig the build program, you are able to provide 5 arguments, which will c
 **You are required to provide all five arguments.**
 The only alternative is to provide no arguments, which will run program with default values set and print the instruction explaining the meaning of each argument to be provided.
 **HINT: It might be useful to run the program at least once with the default settings** by providing no arguments like `./Dining-Philosophers-Problem`, not only to see the hint for arguments meaning, but to see the helper information about number of threads provided by you system/machine. This might be helpful for considering the influence of number of philosophers (and therefore threads) used for execution time. The print looks like this:
+
 ![hint about threads available](screenshots/thread-number-hint.png)
 ##### Abbreviated log mode
 If you decide to use abbreviated logging mode (which seems likely in my opinion, after you decide to experiment a little bit with number of meals and philosophers) you will see something like this:
@@ -42,12 +43,15 @@ So as can be seen, the log print contains:
 ##### Full log mode
 If you decide to use full log option, you will be provided with additional information:
 + the table arrangement, that is which philosopher owns which fork:
+
 ![Table arrangement printed in full-logging mode](screenshots/table-arrangement.png)
 
 + info describing which philosopher is currently eating, on which thread and which forks he was able to acquire in order to do so:
+
 ![Philosopher log on eating a meal](screenshots/full-log-not-shared.png)
 
 + additionally, **if you decided to share meals equally**, you will be provided with the log prints from philosophers who are very kind and decide to wait until more hungry philosophers eat:
++
 ![Philosophers eating logs if sharing](screenshots/full-log-sharing.png)
 ##### No equal-meal-sharing mode
 If you decide you don't want to share meals equally, obviously some logs will be missing (the philosophers will eat as soon as the system grants them access to forks, and therefore there will be no log prints from philosophers deciding to wait).
