@@ -51,7 +51,7 @@ If you decide to use full log option, you will be provided with additional infor
 ![Philosopher log on eating a meal](screenshots/full-log-not-shared.png)
 
 + additionally, **if you decided to share meals equally**, you will be provided with the log prints from philosophers who are very kind and decide to wait until more hungry philosophers eat:
-+
+
 ![Philosophers eating logs if sharing](screenshots/full-log-sharing.png)
 ##### No equal-meal-sharing mode
 If you decide you don't want to share meals equally, obviously some logs will be missing (the philosophers will eat as soon as the system grants them access to forks, and therefore there will be no log prints from philosophers deciding to wait).
@@ -59,12 +59,17 @@ But it will have a more important consequence of unequal number of meals eaten b
 
 Consider some cases:
 - if you run the program like this `./Dining-Philosophers-Problem 6 120 10 0 0` , that is 6 philosophers, 120 meals, 10 microseconds of meal duration, no sharing(0) and abbreviated log(0), you might see a summary like this:
+
 ![No sharing meal count summary 1](screenshots/summary-no-sharing.png)
+
 or
 - usually if you provide some larger number of meals like with `./Dining-Philosophers-Problem 5 12000 0 0 0`, no philosopher will be starved (at least on my machine), but the meals still are not devided equally:
+
 ![No sharing meal count summary 2](screenshots/summary-no-sharing-2.png)
+
 or
 - on my machine, the bigger the number of meals served the relative fairness of sharing provided by the system thread scheduler seems to improve, like when passed 1 200 000 meals to 5 philosophers:
+
 ![No sharing meal count summary 3](screenshots/summary-no-sharing-3.png)
 
 ## Invitation to experiment
