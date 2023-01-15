@@ -43,5 +43,4 @@ class Philosopher
     const bool fullLogging_;
     mutable std::shared_mutex mealsEatenMtx_;
     int mealsEaten_;
-    mutable std::map<std::thread::id, int> shortThreadIds_;
 };

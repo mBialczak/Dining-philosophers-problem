@@ -6,7 +6,7 @@
 class Logger
 {
   public:
-    explicit Logger(std::ostream& stream = std::cout);
+    explicit Logger(std::ostream& stream);
     void print(const std::string& txt) const;
 
   private:

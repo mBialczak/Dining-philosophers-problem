@@ -25,7 +25,7 @@ int main(int args, char** argv)
 
     if (philosophersNumber < 2) {
         std::cout << "Philosophers/forks number must be grater or equal to 2!\n"
-                  << "I am quiting. Try again!\n";
+                  << "I am quitting. Try again!\n";
         return -1;
     }
 
@@ -61,16 +61,16 @@ ParseResult provideDefaults()
 {
     return std::tuple { defaultPhilosophersNumber,
                         defaultMealsNumber,
-                        defaultMealDuration,   // duration of meal eaten by each philosopher in miliseconds
+                        defaultMealDuration,
                         defaultSharingSetting,
-                        defaultFullLoggingSetting };   // should meals be divided as equally as possible
+                        defaultFullLoggingSetting };
 }
 
 void printInstructionIfUnexpectedNumberOfArgs(int providedArgsNumber)
 {
     if (providedArgsNumber - 1 != expectedNumberOfArgs) {
         std::ostringstream message;
-        message << "The number of provided arguments is less then expected!\n\n"
+        message << "The number of provided arguments is different then " << expectedNumberOfArgs << " expected!\n\n"
                 << "Defaults will be used until you decide to use them all - sorry :)\n\n"
                 << "All " << expectedNumberOfArgs << " arguments are expected to provide full functionality.\n"
                 << "----------------------------------------------------\n"
@@ -97,7 +97,7 @@ void printInstructionIfUnexpectedNumberOfArgs(int providedArgsNumber)
 
                 << "- 5th argument -> 0/1 boolean determining if full log should be provided\n"
                 << "\t 0 - abbreviated log\n"
-                << "\t 1 - full log (NOT RECOMMENDED FOR HIGH MEALS NUMBER VALUES\n"
+                << "\t 1 - full log (NOT RECOMMENDED FOR HIGH MEALS NUMBER VALUES)\n"
                 << "\tDEFAULT VALUE -> " << defaultFullLoggingSetting << "\n\n";
         std::cout << message.str();
     }

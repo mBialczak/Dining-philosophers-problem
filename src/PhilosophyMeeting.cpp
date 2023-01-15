@@ -17,7 +17,6 @@ PhilosophyMeeting::PhilosophyMeeting(std::ostream& streamToLog,
 {
     createForks();
     createPhilosophers(mealDuration, shouldShareMealsEqually, fullLogging);
-    threads_.reserve(tableSize_);
 
     logSettings(tableSize,
                 mealsToServe,
@@ -95,6 +94,7 @@ void PhilosophyMeeting::createLastPhilosopher(std::chrono::microseconds mealDura
 
 void PhilosophyMeeting::startEatingDiscussion()
 {
+    threads_.reserve(tableSize_);
     logMeetingStart();
     meetingStartTime_ = std::chrono::high_resolution_clock::now();
     for (auto i = 0; i < tableSize_; ++i) {
@@ -157,7 +157,7 @@ void PhilosophyMeeting::logSettings(int tableSize,
 void PhilosophyMeeting::logMeetingStart()
 {
     std::ostringstream message;
-    message << "The duration of meeting (only the multithreaded part) will be measured.\n\n"
+    message << "The duration of the meeting (only the multithreaded part) will be measured.\n\n"
             << "========= Meeting (the multithreaded part) starts =========";
     logger_ << message.str();
 }

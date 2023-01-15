@@ -26,7 +26,6 @@ Philosopher::Philosopher(Logger& logger,
 
 void Philosopher::tryToEat()
 {
-    shortThreadIds_.emplace(std::this_thread::get_id(), id_);
     while (meeting_.mealsLeft() > 0) {
         if (shareEqually_) {
             if (isAmongMostHungry()) {
@@ -74,6 +73,13 @@ void Philosopher::increaseOwnMealsCount(bool wasMealServed)
     }
 }
 
+int Philosopher::mealsEaten() const
+{
+    std::shared_lock mealsEatenLock(mealsEatenMtx_);
+
+    return mealsEaten_;
+}
+
 int Philosopher::id() const
 {
     return id_;
@@ -91,17 +97,10 @@ int Philosopher::rightForkId() const
                       : -1;
 }
 
-int Philosopher::mealsEaten() const
-{
-    std::shared_lock mealsEatenLock(mealsEatenMtx_);
-
-    return mealsEaten_;
-}
-
 void Philosopher::logEatingMessage() const
 {
     std::ostringstream ss;
-    ss << "thread [" << shortThreadIds_[std::this_thread::get_id()] << "]-> "
+    ss << "thread [" << std::this_thread::get_id() << "]-> "
        << "Philosopher " << std::to_string(id_)
        << " aquired forks "
        << leftFork_->id() << " and " << rightFork_->id()
@@ -112,7 +111,7 @@ void Philosopher::logEatingMessage() const
 void Philosopher::logOthersMoreHungryMessage() const
 {
     std::ostringstream ss;
-    ss << "thread [" << shortThreadIds_[std::this_thread::get_id()] << "]-> "
+    ss << "thread [" << std::this_thread::get_id() << "]-> "
        << "Philosopher " << std::to_string(id_)
        << " decides others are more hungry and is THINKING until his turn";
     logger_ << ss.str();

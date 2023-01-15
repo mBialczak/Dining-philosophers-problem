@@ -21,8 +21,8 @@ class PhilosophyMeeting
                       int tableSize,
                       int mealsToServe,
                       std::chrono::microseconds mealDuration,
-                      bool shouldShareMealsEqually = true,
-                      bool fullLogging = false);
+                      bool shouldShareMealsEqually,
+                      bool fullLogging);
     void startEatingDiscussion();
     void summarizeMeeting();
     bool serveMeal();
