@@ -6,7 +6,7 @@
 #include <sstream>
 
 PhilosophyMeeting::PhilosophyMeeting(std::ostream& streamToLog,
-                                     int tableSize,
+                                     unsigned tableSize,
                                      int mealsToServe,
                                      std::chrono::microseconds mealDuration,
                                      bool shouldShareMealsEqually,
@@ -18,9 +18,7 @@ PhilosophyMeeting::PhilosophyMeeting(std::ostream& streamToLog,
     createForks();
     createPhilosophers(mealDuration, shouldShareMealsEqually, fullLogging);
 
-    logSettings(tableSize,
-                mealsToServe,
-                mealDuration,
+    logSettings(mealDuration,
                 shouldShareMealsEqually,
                 fullLogging);
 
@@ -33,7 +31,7 @@ PhilosophyMeeting::PhilosophyMeeting(std::ostream& streamToLog,
 void PhilosophyMeeting::createForks()
 {
     forks_.reserve(tableSize_);
-    for (auto i = 0; i < tableSize_; i++) {
+    for (unsigned i = 0; i < tableSize_; i++) {
         forks_.emplace_back(std::make_unique<Fork>(i));
     }
 }
@@ -66,7 +64,7 @@ void PhilosophyMeeting::createMiddlePhilosophers(std::chrono::microseconds mealD
                                                  bool shouldShareEqually,
                                                  bool fullLogging)
 {
-    for (auto i = 1; i < tableSize_ - 1; ++i) {
+    for (unsigned i = 1; i < tableSize_ - 1; ++i) {
         philosophers_.emplace_back(std::make_unique<Philosopher>(logger_,
                                                                  forks_[i].get(),
                                                                  forks_[i - 1].get(),
@@ -97,7 +95,7 @@ void PhilosophyMeeting::startEatingDiscussion()
     threads_.reserve(tableSize_);
     logMeetingStart();
     meetingStartTime_ = std::chrono::high_resolution_clock::now();
-    for (auto i = 0; i < tableSize_; ++i) {
+    for (unsigned i = 0; i < tableSize_; ++i) {
         threads_.emplace_back(&Philosopher::tryToEat, philosophers_[i].get());
     }
 }
@@ -131,22 +129,20 @@ int PhilosophyMeeting::findMostHungryPhilosopher() const
 {
     auto iterToMostHungry = std::min_element(philosophers_.begin(),
                                              philosophers_.end(),
-                                             [this](const auto& phOne, const auto& phTwo) {
+                                             [](const auto& phOne, const auto& phTwo) {
                                                  return phOne->mealsEaten() < phTwo->mealsEaten();
                                              });
     return (*iterToMostHungry)->mealsEaten();
 }
 
-void PhilosophyMeeting::logSettings(int tableSize,
-                                    int mealsToServe,
-                                    std::chrono::microseconds mealDuration,
+void PhilosophyMeeting::logSettings(std::chrono::microseconds mealDuration,
                                     bool shouldShareMealsEqually,
                                     bool fullLogging) const
 {
     std::ostringstream message;
     message << "========= Settings =========\n"
-            << "number of philosophers / forks: " << tableSize << '\n'
-            << "meals to serve: " << mealsToServe << '\n'
+            << "number of philosophers / forks: " << tableSize_ << '\n'
+            << "meals to serve: " << meals_ << '\n'
             << "meal duration [microseconds] " << mealDuration.count() << '\n'
             << "equal meal share: " << (shouldShareMealsEqually ? "true" : "false") << '\n'
             << "logging: " << (fullLogging ? "full" : "abbreviated") << '\n';

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 
-using ParseResult = std::tuple<int, int, int, bool, bool>;
+using ParseResult = std::tuple<unsigned, int, int, bool, bool>;
 
 ParseResult parseArgs(int argsNumber, char** argumentsArray);
 ParseResult parseAllProvided(char** argumentsArray);
@@ -11,7 +11,7 @@ ParseResult provideDefaults();
 void printInstructionIfUnexpectedNumberOfArgs(int providedArgsNumber);
 
 constexpr int expectedNumberOfArgs { 5 };
-constexpr int defaultPhilosophersNumber { 5 };
+constexpr unsigned defaultPhilosophersNumber { 5 };
 constexpr int defaultMealsNumber { 3000 };
 constexpr int defaultMealDuration { 0 };
 constexpr bool defaultSharingSetting { true };
