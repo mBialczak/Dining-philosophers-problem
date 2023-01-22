@@ -34,7 +34,7 @@ void PhilosophyMeeting::createForks()
 {
     forks_.reserve(tableSize_);
     for (auto i = 0; i < tableSize_; i++) {
-        forks_.emplace_back(std::make_unique<Fork>(logger_, i));
+        forks_.emplace_back(std::make_unique<Fork>(i));
     }
 }
 

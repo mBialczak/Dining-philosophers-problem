@@ -1,8 +1,7 @@
 #include "Fork.hpp"
 
-Fork::Fork(Logger& logger, int id)
-    : logger_(logger),
-      id_(id)
+Fork::Fork(int id)
+    : id_(id)
 { }
 
 int Fork::id() const
