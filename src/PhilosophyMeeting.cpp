@@ -13,10 +13,15 @@ PhilosophyMeeting::PhilosophyMeeting(std::ostream& streamToLog,
                                      bool fullLogging)
     : logger_(streamToLog),
       tableSize_(tableSize),
-      meals_(mealsToServe)
+      meals_(mealsToServe),
+      shareEqually_(shouldShareMealsEqually),
+      fullLogging_(fullLogging)
 {
     createForks();
-    createPhilosophers(mealDuration, shouldShareMealsEqually, fullLogging);
+    philosophers_.reserve(tableSize_);
+    createFirstPhilosopher(mealDuration);
+    createMiddlePhilosophers(mealDuration);
+    createLastPhilosopher(mealDuration);
 
     logSettings(mealDuration,
                 shouldShareMealsEqually,
@@ -36,33 +41,17 @@ void PhilosophyMeeting::createForks()
     }
 }
 
-void PhilosophyMeeting::createPhilosophers(std::chrono::microseconds mealDuration,
-                                           bool shouldShareEqually,
-                                           bool fullLogging)
-{
-    philosophers_.reserve(tableSize_);
-    createFirstPhilosopher(mealDuration, shouldShareEqually, fullLogging);
-    createMiddlePhilosophers(mealDuration, shouldShareEqually, fullLogging);
-    createLastPhilosopher(mealDuration, shouldShareEqually, fullLogging);
-}
-
-void PhilosophyMeeting::createFirstPhilosopher(std::chrono::microseconds mealDuration,
-                                               bool shouldShareEqually,
-                                               bool fullLogging)
+void PhilosophyMeeting::createFirstPhilosopher(std::chrono::microseconds mealDuration)
 {
     philosophers_.emplace_back(std::make_unique<Philosopher>(logger_,
                                                              forks_[0].get(),
                                                              forks_[tableSize_ - 1].get(),
                                                              *this,
                                                              0,
-                                                             mealDuration,
-                                                             shouldShareEqually,
-                                                             fullLogging));
+                                                             mealDuration));
 }
 
-void PhilosophyMeeting::createMiddlePhilosophers(std::chrono::microseconds mealDuration,
-                                                 bool shouldShareEqually,
-                                                 bool fullLogging)
+void PhilosophyMeeting::createMiddlePhilosophers(std::chrono::microseconds mealDuration)
 {
     for (unsigned i = 1; i < tableSize_ - 1; ++i) {
         philosophers_.emplace_back(std::make_unique<Philosopher>(logger_,
@@ -70,24 +59,18 @@ void PhilosophyMeeting::createMiddlePhilosophers(std::chrono::microseconds mealD
                                                                  forks_[i - 1].get(),
                                                                  *this,
                                                                  i,
-                                                                 mealDuration,
-                                                                 shouldShareEqually,
-                                                                 fullLogging));
+                                                                 mealDuration));
     }
 }
 
-void PhilosophyMeeting::createLastPhilosopher(std::chrono::microseconds mealDuration,
-                                              bool shouldShareEqually,
-                                              bool fullLogging)
+void PhilosophyMeeting::createLastPhilosopher(std::chrono::microseconds mealDuration)
 {
     philosophers_.emplace_back(std::make_unique<Philosopher>(logger_,
                                                              forks_[tableSize_ - 1].get(),
                                                              forks_[tableSize_ - 2].get(),
                                                              *this,
                                                              tableSize_ - 1,
-                                                             mealDuration,
-                                                             shouldShareEqually,
-                                                             fullLogging));
+                                                             mealDuration));
 }
 
 void PhilosophyMeeting::startEatingDiscussion()
@@ -96,7 +79,7 @@ void PhilosophyMeeting::startEatingDiscussion()
     logMeetingStart();
     meetingStartTime_ = std::chrono::high_resolution_clock::now();
     for (unsigned i = 0; i < tableSize_; ++i) {
-        threads_.emplace_back(&Philosopher::tryToEat, philosophers_[i].get());
+        threads_.emplace_back(&Philosopher::tryToEat, philosophers_[i].get(), shareEqually_, fullLogging_);
     }
 }
 
@@ -177,7 +160,6 @@ void PhilosophyMeeting::logSummaryMessage() const
 
 bool PhilosophyMeeting::serveMeal()
 {
-    std::lock_guard mealsLock(mealsMtx_);
     if (meals_) {
         --meals_;
         return true;
@@ -187,6 +169,5 @@ bool PhilosophyMeeting::serveMeal()
 
 int PhilosophyMeeting::mealsLeft() const
 {
-    std::shared_lock mealsLock(mealsMtx_);
     return meals_;
 }

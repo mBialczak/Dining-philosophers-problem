@@ -10,42 +10,38 @@ Philosopher::Philosopher(Logger& logger,
                          Fork* rightFork,
                          PhilosophyMeeting& meeting,
                          int id,
-                         std::chrono::microseconds mealDuration,
-                         bool shouldShareMealsEqually,
-                         bool fullLogging)
+                         std::chrono::microseconds mealDuration)
     : logger_(logger),
       leftFork_(leftFork),
       rightFork_(rightFork),
       meeting_(meeting),
       id_(id),
       mealDuration_(mealDuration),
-      shareEqually_(shouldShareMealsEqually),
-      fullLogging_(fullLogging),
       mealsEaten_(0)
 { }
 
-void Philosopher::tryToEat()
+void Philosopher::tryToEat(bool shareEqually, bool fullLogging)
 {
     while (meeting_.mealsLeft() > 0) {
-        if (shareEqually_) {
+        if (shareEqually) {
             if (isAmongMostHungry()) {
-                eat();
+                eat(fullLogging);
             }
             else {
-                if (fullLogging_) {
+                if (fullLogging) {
                     logOthersMoreHungryMessage();
                 }
             }
         }
         else {
-            eat();
+            eat(fullLogging);
         }
     }
 }
 
-void Philosopher::eat()
+void Philosopher::eat(bool fullLogging)
 {
-    bool wasMealServed = requestMeal();
+    bool wasMealServed = requestMeal(fullLogging);
     increaseOwnMealsCount(wasMealServed);
     std::this_thread::sleep_for(mealDuration_);
 }
@@ -55,10 +51,10 @@ bool Philosopher::isAmongMostHungry() const
     return mealsEaten() <= meeting_.findMostHungryPhilosopher();
 }
 
-bool Philosopher::requestMeal() const
+bool Philosopher::requestMeal(bool fullLogging) const
 {
     std::scoped_lock bothForksLock(leftFork_->getMtx(), rightFork_->getMtx());
-    if (fullLogging_) {
+    if (fullLogging) {
         logEatingMessage();
     }
 
@@ -68,15 +64,12 @@ bool Philosopher::requestMeal() const
 void Philosopher::increaseOwnMealsCount(bool wasMealServed)
 {
     if (wasMealServed) {
-        std::lock_guard lock(mealsEatenMtx_);
         ++mealsEaten_;
     }
 }
 
 int Philosopher::mealsEaten() const
 {
-    std::shared_lock mealsEatenLock(mealsEatenMtx_);
-
     return mealsEaten_;
 }
 

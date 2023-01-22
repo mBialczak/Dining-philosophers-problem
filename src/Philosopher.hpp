@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <map>
 #include <shared_mutex>
 #include <thread>
@@ -16,18 +17,16 @@ class Philosopher
                 Fork* rightFork,
                 PhilosophyMeeting& meeting,
                 int id,
-                std::chrono::microseconds mealDuration,
-                bool shouldShareMealsEqually,
-                bool fullLogging);
-    void tryToEat();
+                std::chrono::microseconds mealDuration);
+    void tryToEat(bool shareEqually, bool fullLogging);
     int id() const;
     int leftForkId() const;
     int rightForkId() const;
     int mealsEaten() const;
 
   private:
-    void eat();
-    bool requestMeal() const;
+    void eat(bool fullLogging);
+    bool requestMeal(bool fullLogging) const;
     void increaseOwnMealsCount(bool wasMealServed);
     void logEatingMessage() const;
     void logOthersMoreHungryMessage() const;
@@ -39,8 +38,5 @@ class Philosopher
     PhilosophyMeeting& meeting_;
     const int id_;
     const std::chrono::microseconds mealDuration_;
-    const bool shareEqually_;
-    const bool fullLogging_;
-    mutable std::shared_mutex mealsEatenMtx_;
-    int mealsEaten_;
+    std::atomic<int> mealsEaten_;
 };
