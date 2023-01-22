@@ -16,7 +16,7 @@ target_compile_options(${PROJECT_NAME}
                       PRIVATE
                       -Wall
                       -Wextra
-                      -pedantic
+                      -Wpedantic
                       -Wconversion
                       -Werror
                       -fsanitize=thread)
@@ -25,7 +25,7 @@ target_compile_options(${PROJECT_NAME}
                        PRIVATE
                        -Wall
                        -Wextra
-                       -pedantic
+                       -Wpedantic
                        -Wconversion
                        -Werror)
 endif()
